@@ -1,0 +1,17 @@
+# --- UI ---
+streamlit>=1.35.0
+
+# --- Cloud APIs ---
+anthropic>=0.28.0
+openai>=1.30.0
+
+# --- Edge / Local Inference (llama.cpp Python bindings for GGUF models) ---
+llama-cpp-python>=0.2.77
+
+# --- Semantic Cache: Embeddings & Vector Search ---
+sentence-transformers>=3.0.0
+numpy>=1.26.0
+faiss-cpu>=1.8.0
+
+# --- Utilities ---
+python-dotenv>=1.0.0
