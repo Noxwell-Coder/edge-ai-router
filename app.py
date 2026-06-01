@@ -3,76 +3,114 @@ from core.router import CascadingRouter
 
 CLOUD_REQUEST_COST = 0.02
 
+MOCK_HISTORY = [
+    "Python basics",
+    "Deployment strategies",
+    "Docker vs Kubernetes",
+    "REST API design",
+    "ML model optimization",
+    "Network security review",
+    "CI/CD pipeline setup",
+]
+
 
 def init_session():
-    if "router" not in st.session_state:
-        st.session_state.router = CascadingRouter()
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    if "cost_saved" not in st.session_state:
-        st.session_state.cost_saved = 0.0
-    if "cloud_cost" not in st.session_state:
-        st.session_state.cloud_cost = 0.0
-    if "total_requests" not in st.session_state:
-        st.session_state.total_requests = 0
-    if "local_requests" not in st.session_state:
-        st.session_state.local_requests = 0
+    defaults = {
+        "router": CascadingRouter(),
+        "messages": [],
+        "show_stats": True,
+        "cost_saved": 0.0,
+        "cloud_cost": 0.0,
+        "total_requests": 0,
+        "local_requests": 0,
+    }
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+
+def toggle_stats():
+    st.session_state.show_stats = not st.session_state.show_stats
+
+
+def reset_session():
+    for key in ["messages", "cost_saved", "cloud_cost",
+                "total_requests", "local_requests", "router"]:
+        st.session_state.pop(key, None)
 
 
 def render_sidebar():
     with st.sidebar:
-        st.title("💰 Cost Control Dashboard")
-        st.caption("Live session metrics — resets on page reload")
-        st.divider()
-
-        total = st.session_state.total_requests
-        local = st.session_state.local_requests
-        efficiency = (local / total * 100) if total > 0 else 0.0
-        full_cloud_cost = (total * CLOUD_REQUEST_COST) if total > 0 else 0.0
-
-        saved_delta = f"+${full_cloud_cost - st.session_state.cloud_cost:.4f} vs full-cloud baseline"
-        st.metric(
-            label="💚 Total Saved (Local Runs)",
-            value=f"${st.session_state.cost_saved:.4f}",
-            delta=saved_delta if total > 0 else None,
+        # Scope the blue override to only this sidebar's primary button
+        st.markdown(
+            """
+            <style>
+            [data-testid="stSidebar"] [data-testid="baseButton-primary"] {
+                background-color: #2563eb;
+                border-color: #2563eb;
+                color: #ffffff;
+            }
+            [data-testid="stSidebar"] [data-testid="baseButton-primary"]:hover {
+                background-color: #1d4ed8;
+                border-color: #1d4ed8;
+                color: #ffffff;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
         )
-
-        cloud_delta = f"-${st.session_state.cost_saved:.4f} vs full-cloud baseline"
-        st.metric(
-            label="☁️ Total Cloud Spend",
-            value=f"${st.session_state.cloud_cost:.4f}",
-            delta=cloud_delta if total > 0 else None,
-            delta_color="inverse",
-        )
-
-        st.metric(
-            label="⚡ Infrastructure Efficiency",
-            value=f"{efficiency:.1f}%",
-            help="Percentage of requests resolved locally via Cache or Edge AI",
-        )
+        st.button("➕ New Chat", use_container_width=True,
+                  type="primary", on_click=reset_session)
 
         st.divider()
-        st.markdown("**System Status**")
-        if total == 0:
-            st.info("⚪ Idle — Awaiting requests")
-        elif efficiency >= 70:
-            st.success("🟢 Operational — Budget Optimizing")
-        else:
-            st.error("🔴 Cloud Burn Alert — Review Routing Policy")
+        st.caption("Recent Conversations")
+        for item in MOCK_HISTORY:
+            st.markdown(f"💬 &nbsp; {item}")
 
-        st.divider()
-        st.markdown("**Session Breakdown**")
-        col1, col2, col3 = st.columns(3)
-        col1.metric("Total", total)
-        col2.metric("Local", local)
-        col3.metric("Cloud", total - local)
 
-        st.divider()
-        if st.button("🗑️ Reset Session", use_container_width=True, type="secondary"):
-            for key in ["messages", "cost_saved", "cloud_cost",
-                        "total_requests", "local_requests", "router"]:
-                st.session_state.pop(key, None)
-            st.rerun()
+def render_stats_panel():
+    st.subheader("💰 Cost Control Dashboard")
+    st.caption("Live session metrics — resets on page reload")
+
+    total = st.session_state.total_requests
+    local = st.session_state.local_requests
+    efficiency = (local / total * 100) if total > 0 else 0.0
+    full_cloud_cost = total * CLOUD_REQUEST_COST
+
+    st.metric(
+        label="🟢 Total Money Saved (Local Runs)",
+        value=f"${st.session_state.cost_saved:.4f}",
+        delta=(f"+${full_cloud_cost - st.session_state.cloud_cost:.4f} vs full-cloud"
+               if total > 0 else None),
+    )
+    st.metric(
+        label="☁️ Total Cloud Spending",
+        value=f"${st.session_state.cloud_cost:.4f}",
+        delta=(f"-${st.session_state.cost_saved:.4f} vs full-cloud"
+               if total > 0 else None),
+        delta_color="inverse",
+    )
+    st.metric(
+        label="⚡ Infrastructure Efficiency",
+        value=f"{efficiency:.1f}%",
+        help="Percentage of requests resolved locally via Cache or Edge AI",
+    )
+
+    st.divider()
+    st.markdown("**System State**")
+    if total == 0:
+        st.info("⚪ Idle — Awaiting requests")
+    elif efficiency >= 70:
+        st.success("🟢 Operational — Budget Optimizing")
+    else:
+        st.error("🔴 Cloud Burn Alert — Review Routing Policy")
+
+    st.divider()
+    st.markdown("**Session Breakdown**")
+    b1, b2, b3 = st.columns(3)
+    b1.metric("Total", total)
+    b2.metric("Local", local)
+    b3.metric("Cloud", total - local)
 
 
 def render_messages():
@@ -92,17 +130,16 @@ def render_messages():
 
 def _tier_metadata(level: str, latency: float) -> tuple[str, str, str]:
     if "Tier 1" in level:
-        return "⚡", "Tier 1 — Local Cache", f"Instant cache hit — zero compute, zero cost. `{latency:.2f}s`"
+        return ("⚡", "Tier 1 — Local Cache",
+                f"Instant cache hit — zero compute, zero cost. `{latency:.2f}s`")
     if "Tier 2" in level:
-        return "🖥️", "Tier 2 — On-Device Edge AI", f"Resolved on Apple Silicon — no cloud spend incurred. `{latency:.2f}s`"
-    return "☁️", "Tier 3 — Cloud API", f"Escalated to cloud model — **${CLOUD_REQUEST_COST:.2f} charged**. `{latency:.2f}s`"
+        return ("🖥️", "Tier 2 — On-Device Edge AI",
+                f"Resolved on Apple Silicon — no cloud spend incurred. `{latency:.2f}s`")
+    return ("☁️", "Tier 3 — Cloud API",
+            f"Escalated to cloud model — **${CLOUD_REQUEST_COST:.2f} charged**. `{latency:.2f}s`")
 
 
 def process_prompt(prompt: str):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
     with st.spinner("Routing and generating..."):
         level, response, latency = st.session_state.router.process_request(prompt)
 
@@ -117,15 +154,9 @@ def process_prompt(prompt: str):
     icon, tier_label, tier_note = _tier_metadata(level, latency)
     router_content = f"{icon} **Routed via: {tier_label}** — {tier_note}"
 
-    with st.chat_message("assistant", avatar="⚙️"):
-        st.markdown(router_content)
-
-    with st.chat_message("assistant"):
-        st.markdown(response)
-
+    st.session_state.messages.append({"role": "user", "content": prompt})
     st.session_state.messages.append({"role": "router", "content": router_content})
     st.session_state.messages.append({"role": "assistant", "content": response})
-
     st.rerun()
 
 
@@ -141,23 +172,38 @@ st.set_page_config(
 init_session()
 render_sidebar()
 
-st.title("⚡ Edge AI Cascading Router")
-st.caption(
-    "Intelligent routing pipeline: **Cache → Edge AI → Cloud**. "
-    "Minimizes cloud spend by resolving every query at the cheapest viable tier."
-)
+# Header
+title_col, btn_col = st.columns([5, 1])
+with title_col:
+    st.title("⚡ Edge AI Cascading Router")
+with btn_col:
+    btn_label = "✖ Stats" if st.session_state.show_stats else "📊 Stats"
+    st.button(btn_label, key="toggle_stats", on_click=toggle_stats,
+              use_container_width=True)
 
-if not st.session_state.messages:
-    with st.container():
+# Main content
+if st.session_state.show_stats:
+    chat_col, stats_col = st.columns([3, 1], gap="large")
+else:
+    chat_col = st.container()
+    stats_col = None
+
+with chat_col:
+    if len(st.session_state.messages) == 0:
         st.info(
-            "**How it works:**  \n"
-            "- ⚡ **Tier 1 (Cache)** — Identical queries are served instantly from memory at $0.00  \n"
-            "- 🖥️ **Tier 2 (Edge AI)** — Simple queries are resolved on-device by a local model at $0.00  \n"
-            "- ☁️ **Tier 3 (Cloud)** — Complex queries are escalated to a cloud model at $0.02  \n\n"
-            "Try asking something simple, then something complex (e.g. *'what is TCP/IP'* vs *'analyze this network architecture'*)."
+            "**How the routing pipeline works:**  \n"
+            "- ⚡ **Tier 1 — Cache:** Identical queries served instantly at $0.00  \n"
+            "- 🖥️ **Tier 2 — Edge AI:** Simple queries resolved on-device at $0.00  \n"
+            "- ☁️ **Tier 3 — Cloud:** Complex queries escalated to cloud at $0.02  \n\n"
+            "Try something simple (*'what is TCP/IP'*) then something complex "
+            "(*'analyze this network architecture'*) to see the router in action."
         )
 
-render_messages()
+    render_messages()
 
-if prompt := st.chat_input("Ask anything..."):
-    process_prompt(prompt)
+    if prompt := st.chat_input("Ask anything..."):
+        process_prompt(prompt)
+
+if stats_col is not None:
+    with stats_col:
+        render_stats_panel()

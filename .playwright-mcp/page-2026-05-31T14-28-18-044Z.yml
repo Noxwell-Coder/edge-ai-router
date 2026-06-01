@@ -1,0 +1,124 @@
+- generic [ref=e2]:
+  - generic [ref=e7]:
+    - button "keyboard_double_arrow_left" [ref=e10] [cursor=pointer]:
+      - generic [ref=e12]: keyboard_double_arrow_left
+    - generic [ref=e15]:
+      - heading "⚡ Edge AI Router" [level=2] [ref=e20]
+      - separator [ref=e25]
+      - button "➕ New Chat" [ref=e28] [cursor=pointer]:
+        - paragraph [ref=e32]: ➕ New Chat
+      - paragraph [ref=e37]
+      - paragraph [ref=e42]:
+        - strong [ref=e43]: 💬 Recent Conversations
+      - button "Python basics" [ref=e46] [cursor=pointer]:
+        - code [ref=e54]: Python basics
+      - button "Deployment strategies Copy to clipboard" [ref=e57] [cursor=pointer]:
+        - generic [ref=e62]:
+          - code [ref=e65]: Deployment strategies
+          - button "Copy to clipboard" [ref=e70]:
+            - img [ref=e71]
+      - button "Docker vs Kubernetes" [ref=e76] [cursor=pointer]:
+        - code [ref=e84]: Docker vs Kubernetes
+      - button "REST API design" [ref=e87] [cursor=pointer]:
+        - code [ref=e95]: REST API design
+      - button "ML model optimization" [ref=e98] [cursor=pointer]:
+        - code [ref=e106]: ML model optimization
+      - button "Network security review" [ref=e109] [cursor=pointer]:
+        - code [ref=e117]: Network security review
+      - button "CI/CD pipeline setup" [ref=e120] [cursor=pointer]:
+        - code [ref=e128]: CI/CD pipeline setup
+      - button "System design patterns" [ref=e131] [cursor=pointer]:
+        - code [ref=e139]: System design patterns
+      - separator [ref=e144]
+      - paragraph [ref=e149]: Edge AI Cascading Router · v1.0
+  - generic [ref=e3]:
+    - banner [ref=e152]:
+      - button "Deploy" [ref=e157] [cursor=pointer]:
+        - generic [ref=e159]: Deploy
+    - generic [ref=e160]:
+      - heading "⚡ Edge AI Cascading Router" [level=2] [ref=e166]:
+        - text: ⚡ Edge AI Cascading Router
+        - generic [ref=e167]:
+          - link "Link to heading":
+            - /url: "#edge-ai-cascading-router"
+            - img
+      - paragraph [ref=e172]:
+        - text: "Intelligent routing pipeline:"
+        - strong [ref=e173]: Cache → Edge AI → Cloud
+        - text: · Minimizes cloud spend by resolving every query at the cheapest viable tier.
+      - generic [ref=e175]:
+        - generic [ref=e177]:
+          - status [ref=e180]:
+            - generic [ref=e183]:
+              - paragraph [ref=e184]:
+                - strong [ref=e185]: "How the routing pipeline works:"
+              - list [ref=e186]:
+                - listitem [ref=e187]:
+                  - text: ⚡
+                  - strong [ref=e188]: Tier 1 (Cache)
+                  - text: — Identical queries are served instantly from memory at
+                  - strong [ref=e189]: $0.00
+                - listitem [ref=e190]:
+                  - text: 🖥️
+                  - strong [ref=e191]: Tier 2 (Edge AI)
+                  - text: — Simple queries are resolved on-device by Gemma-2B at
+                  - strong [ref=e192]: $0.00
+                - listitem [ref=e193]:
+                  - text: ☁️
+                  - strong [ref=e194]: Tier 3 (Cloud)
+                  - text: — Complex queries are escalated to a frontier cloud model at
+                  - strong [ref=e195]: $0.02
+              - paragraph [ref=e196]:
+                - text: "Try:"
+                - emphasis [ref=e197]: "'what is TCP/IP'"
+                - text: (Edge) vs
+                - emphasis [ref=e198]: "'analyze this network architecture'"
+                - text: (Cloud), then repeat the same query to see the cache kick in.
+          - generic [ref=e202]:
+            - textbox "Ask anything..." [ref=e206]
+            - button "Send message" [disabled] [ref=e208]:
+              - img [ref=e209]
+        - generic [ref=e215]:
+          - heading "💰 Cost Control Dashboard" [level=3] [ref=e221]:
+            - text: 💰 Cost Control Dashboard
+            - generic [ref=e222]:
+              - link "Link to heading":
+                - /url: "#cost-control-dashboard"
+                - img
+          - paragraph [ref=e227]: Live session metrics — resets on reload
+          - separator [ref=e232]
+          - generic [ref=e235]:
+            - paragraph [ref=e238]: 💚 Total Money Saved (Local Launch)
+            - paragraph [ref=e241]: $0.0000
+          - generic [ref=e244]:
+            - paragraph [ref=e247]: ☁️ Total Cloud Spending
+            - paragraph [ref=e250]: $0.0000
+          - generic [ref=e253]:
+            - generic [ref=e254]:
+              - paragraph [ref=e256]: ⚡ Infrastructure Efficiency
+              - button "Help for ⚡ Infrastructure Efficiency" [ref=e260] [cursor=pointer]:
+                - img [ref=e261]
+            - paragraph [ref=e266]: 0.0%
+          - separator [ref=e271]
+          - paragraph [ref=e276]:
+            - strong [ref=e277]: System State
+          - status [ref=e280]:
+            - generic [ref=e282]:
+              - generic [ref=e285]: ⚪
+              - paragraph [ref=e287]: Idle — Awaiting requests
+          - separator [ref=e292]
+          - paragraph [ref=e297]:
+            - strong [ref=e298]: Session Breakdown
+          - generic [ref=e300]:
+            - generic [ref=e305]:
+              - paragraph [ref=e308]: Total
+              - paragraph [ref=e311]: "0"
+            - generic [ref=e316]:
+              - paragraph [ref=e319]: Local
+              - paragraph [ref=e322]: "0"
+            - generic [ref=e327]:
+              - paragraph [ref=e330]: Cloud
+              - paragraph [ref=e333]: "0"
+          - separator [ref=e338]
+          - button "🗑️ Reset Session" [ref=e341] [cursor=pointer]:
+            - paragraph [ref=e345]: 🗑️ Reset Session
